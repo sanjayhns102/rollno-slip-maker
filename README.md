@@ -10,14 +10,14 @@ Data Taken from Excel Sheet
 #### Get all Exam Slip
 
 ```http
-  GET http://localhost:3000// 
+  GET http://localhost:3000/
 ```
 
 
 #### Get Single Slip Using Roll no
 
 ```http
-  GET http://localhost:3000//id
+  GET http://localhost:3000/id
 ```
 
 
