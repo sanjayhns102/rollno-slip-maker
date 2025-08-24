@@ -61,38 +61,18 @@ const logoBase64 = toBase64ImageLogo(logoPath);
 app.get("/", (req, res) => {
   res.render("slips", { students, datesheet, logoBase64  });
 });
-app.get("/:rollno", (req, res) => {
-  const rollno = req.params.rollno;
-
-  const student = students.find(st => st.RollNo === rollno);
-
-  if (!student) {
-    return res.status(404).send("Student not found.");
-  }
-
-  res.render("slips", { students: [student], datesheet, logoBase64 });
-});
 
 
-
-
-
-
-
-// Generate PDF (4 slips per A4 page)
+// Generate PDF for all roll numbers
 app.get("/generate-pdf", async (req, res) => {
   try {
     const html = await ejs.renderFile(
       path.join(__dirname, "views", "slips.ejs"),
-      { students, datesheet },
+      { students, datesheet, logoBase64 },   // 👈 passing all students
       { async: true }
     );
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      // Linux server fix (agar error aaye to enable karna):
-      // args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.setContent(html, { waitUntil: "networkidle0" });
@@ -106,9 +86,6 @@ app.get("/generate-pdf", async (req, res) => {
 
     await browser.close();
 
-    const outPath = path.join(__dirname, "rollnoslips.pdf");
-    fs.writeFileSync(outPath, pdfBuffer);
-
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "inline; filename=rollnoslips.pdf");
     res.send(pdfBuffer);
@@ -117,6 +94,20 @@ app.get("/generate-pdf", async (req, res) => {
     res.status(500).send("PDF generation error: " + err.message);
   }
 });
+
+
+app.get("/:rollno", (req, res) => {
+  const rollno = req.params.rollno;
+
+  const student = students.find(st => st.RollNo === rollno);
+
+  if (!student) {
+    return res.status(404).send("Student not found.");
+  }
+
+  res.render("slips", { students: [student], datesheet, logoBase64 });
+});
+
 
 app.listen(3000, () => {
   console.log("✅ Server running on http://localhost:3000");
