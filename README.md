@@ -10,12 +10,21 @@ Data Taken from Excel Sheet
 #### Get all Exam Slip
 
 ```http
-  GET / 
+  GET http://localhost:3000// 
 ```
 
 
 #### Get Single Slip Using Roll no
 
 ```http
-  GET /id
+  GET http://localhost:3000//id
 ```
+
+
+
+## Screenshots
+Single Slip- Search by Roll No
+[![Screenshot-2025-08-24-082417.png](https://i.postimg.cc/c17j67s4/Screenshot-2025-08-24-082417.png)](https://postimg.cc/Bt6NVKLd)
+
+All Exam Roll No. Slip ready in single click
+[![Screenshot-2025-08-24-082239.png](https://i.postimg.cc/yNw53vgW/Screenshot-2025-08-24-082239.png)](https://postimg.cc/hJ1MH80q)
