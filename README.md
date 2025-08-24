@@ -22,9 +22,9 @@ Data Taken from Excel Sheet
 
 
 
-## Screenshots
-Single Slip- Search by Roll No
+## Screenshots Single Slip- Search by Roll No
+
 [![Screenshot-2025-08-24-082417.png](https://i.postimg.cc/c17j67s4/Screenshot-2025-08-24-082417.png)](https://postimg.cc/Bt6NVKLd)
 
-All Exam Roll No. Slip ready in single click
+## Screenshots All Exam Roll No. Slip ready in single click
 [![Screenshot-2025-08-24-082239.png](https://i.postimg.cc/yNw53vgW/Screenshot-2025-08-24-082239.png)](https://postimg.cc/hJ1MH80q)
