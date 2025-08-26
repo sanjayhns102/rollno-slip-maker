@@ -22,7 +22,7 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 
 // Students data from Excel
 // Excel columns: RollNo, Name, Class, FatherName, PhotoPath
-const rawStudents = readExcel(path.join(__dirname, "data10th.xlsx"));
+const rawStudents = readExcel(path.join(__dirname, "data8th.xlsx"));
 
 const students = rawStudents.map((st) => {
   const imgAbs = path.join(__dirname, "public", "images", String(st.PhotoPath || "").trim());
@@ -33,14 +33,16 @@ const students = rawStudents.map((st) => {
   };
 });
 
-// 10th datesheet (same for all)
+// Place datesheet here(same for all)
 const datesheet = [
-  { date: "15-09-2025", subject: "Science" },
-  { date: "17-09-2025", subject: "Hindi" },
+   { date: "10-09-2025", subject: "SKT" },
+  { date: "12-09-2025", subject: "Computer" },
+  { date: "15-09-2025", subject: "Hindi" },
+  { date: "17-09-2025", subject: "English" },
   { date: "19-09-2025", subject: "Maths" },
-  { date: "20-09-2025", subject: "Music" },
-  { date: "24-09-2025", subject: "S.st" },
-  { date: "25-09-2025", subject: "English" }
+  { date: "20-09-2025", subject: "GK" },
+  { date: "24-09-2025", subject: "Science" },
+  { date: "25-09-2025", subject: "S.st" }
 ];
 
 function toBase64ImageLogo(filePath) {
