@@ -22,8 +22,7 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 
 // Students data from Excel
 // Excel columns: RollNo, Name, Class, FatherName, PhotoPath
-const rawStudents = readExcel(path.join(__dirname, "data10th.xlsx"));
-
+const rawStudents = readExcel(path.join(__dirname, "data5th.xlsx"));
 const students = rawStudents.map((st) => {
   const imgAbs = path.join(__dirname, "public", "images", String(st.PhotoPath || "").trim());
   //console.log("Image path:", imgAbs); // Debugging
@@ -33,13 +32,13 @@ const students = rawStudents.map((st) => {
   };
 });
 
-// 10th datesheet (same for all)
+// Place datesheet here(same for all)
 const datesheet = [
-  { date: "15-09-2025", subject: "Science" },
+  { date: "15-09-2025", subject: "S.st" },
   { date: "17-09-2025", subject: "Hindi" },
   { date: "19-09-2025", subject: "Maths" },
-  { date: "20-09-2025", subject: "Music" },
-  { date: "24-09-2025", subject: "S.st" },
+  { date: "20-09-2025", subject: "Computer" },
+  { date: "24-09-2025", subject: "Science" },
   { date: "25-09-2025", subject: "English" }
 ];
 
@@ -55,44 +54,27 @@ function toBase64ImageLogo(filePath) {
 const logoPath = path.join(__dirname, "public", "images", "logo.jpg");
 const logoBase64 = toBase64ImageLogo(logoPath);
 
+//For stamp 
+const stampPath = path.join(__dirname, "public", "images", "stamp.jpg");
+const stampBase64 = toBase64ImageLogo(stampPath);
 
 
 // Preview in browser
 app.get("/", (req, res) => {
-  res.render("slips", { students, datesheet, logoBase64  });
-});
-app.get("/:rollno", (req, res) => {
-  const rollno = req.params.rollno;
-
-  const student = students.find(st => st.RollNo === rollno);
-
-  if (!student) {
-    return res.status(404).send("Student not found.");
-  }
-
-  res.render("slips", { students: [student], datesheet, logoBase64 });
+  res.render("slips", { students, datesheet, logoBase64, stampBase64  });
 });
 
 
-
-
-
-
-
-// Generate PDF (4 slips per A4 page)
+// Generate PDF for all roll numbers
 app.get("/generate-pdf", async (req, res) => {
   try {
     const html = await ejs.renderFile(
       path.join(__dirname, "views", "slips.ejs"),
-      { students, datesheet },
+      { students, datesheet, logoBase64, stampBase64 },   // 👈 passing all students
       { async: true }
     );
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      // Linux server fix (agar error aaye to enable karna):
-      // args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.setContent(html, { waitUntil: "networkidle0" });
@@ -106,17 +88,28 @@ app.get("/generate-pdf", async (req, res) => {
 
     await browser.close();
 
-    const outPath = path.join(__dirname, "rollnoslips.pdf");
-    fs.writeFileSync(outPath, pdfBuffer);
-
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "inline; filename=rollnoslips.pdf");
+    res.setHeader("Content-Disposition", "inline; filename=AdmitCard.pdf");
     res.send(pdfBuffer);
   } catch (err) {
     console.error(err);
     res.status(500).send("PDF generation error: " + err.message);
   }
 });
+
+
+app.get("/:rollno", (req, res) => {
+  const rollno = req.params.rollno;
+
+  const student = students.find(st => st.RollNo === rollno);
+
+  if (!student) {
+    return res.status(404).send("Student not found.");
+  }
+
+  res.render("slips", { students: [student], datesheet, logoBase64, stampBase64 });
+});
+
 
 app.listen(3000, () => {
   console.log("✅ Server running on http://localhost:3000");

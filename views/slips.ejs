@@ -71,6 +71,20 @@
     .info p { margin: 2px 0; font-size: 15px; }
     .label { font-weight: bold; }
 
+    /* Stamp wrap */
+    .student-row .stamp-wrap {
+      flex: 0 0 80px; /* fixed width for stamp */
+      display: flex;
+      justify-content: center;
+    }
+
+    .student-row img.stamp {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      /* opacity: 0.9; thoda transparent look */
+    }
+
     /* Datesheet */
     .datesheet {
       border-top: 1px dashed #000;
@@ -139,11 +153,17 @@
               <p><span class="label">Father's Name:</span> <%= st.FatherName %></p>
               <p><span class="label">Roll No:</span> <%= st.RollNo %></p>
               <p><span class="label">Class:</span> <%= st.Class %></p>
-              
+            </div>
+
+            <!-- Stamp Image -->
+            <div class="stamp-wrap">
+              <img src="<%= stampBase64 %>" class="stamp" alt="Stamp">
             </div>
           </div>
 
-          <!-- Datesheet -->
+          
+
+          <!-- Datesheet data -->
           <div class="datesheet">
             <p><span class="label">Datesheet SA-1</span> </p>
             <table>
