@@ -22,8 +22,7 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 
 // Students data from Excel
 // Excel columns: RollNo, Name, Class, FatherName, PhotoPath
-const rawStudents = readExcel(path.join(__dirname, "data8th.xlsx"));
-
+const rawStudents = readExcel(path.join(__dirname, "data10th.xlsx"));
 const students = rawStudents.map((st) => {
   const imgAbs = path.join(__dirname, "public", "images", String(st.PhotoPath || "").trim());
   //console.log("Image path:", imgAbs); // Debugging
@@ -35,14 +34,12 @@ const students = rawStudents.map((st) => {
 
 // Place datesheet here(same for all)
 const datesheet = [
-   { date: "10-09-2025", subject: "SKT" },
-  { date: "12-09-2025", subject: "Computer" },
-  { date: "15-09-2025", subject: "Hindi" },
-  { date: "17-09-2025", subject: "English" },
+  { date: "15-09-2025", subject: "Science" },
+  { date: "17-09-2025", subject: "Hindi" },
   { date: "19-09-2025", subject: "Maths" },
-  { date: "20-09-2025", subject: "GK" },
-  { date: "24-09-2025", subject: "Science" },
-  { date: "25-09-2025", subject: "S.st" }
+  { date: "20-09-2025", subject: "Music" },
+  { date: "24-09-2025", subject: "S.st" },
+  { date: "25-09-2025", subject: "English" }
 ];
 
 function toBase64ImageLogo(filePath) {
@@ -57,11 +54,14 @@ function toBase64ImageLogo(filePath) {
 const logoPath = path.join(__dirname, "public", "images", "logo.jpg");
 const logoBase64 = toBase64ImageLogo(logoPath);
 
+//For stamp 
+const stampPath = path.join(__dirname, "public", "images", "stamp.jpg");
+const stampBase64 = toBase64ImageLogo(stampPath);
 
 
 // Preview in browser
 app.get("/", (req, res) => {
-  res.render("slips", { students, datesheet, logoBase64  });
+  res.render("slips", { students, datesheet, logoBase64, stampBase64  });
 });
 
 
@@ -70,7 +70,7 @@ app.get("/generate-pdf", async (req, res) => {
   try {
     const html = await ejs.renderFile(
       path.join(__dirname, "views", "slips.ejs"),
-      { students, datesheet, logoBase64 },   // 👈 passing all students
+      { students, datesheet, logoBase64, stampBase64 },   // 👈 passing all students
       { async: true }
     );
 
@@ -107,7 +107,7 @@ app.get("/:rollno", (req, res) => {
     return res.status(404).send("Student not found.");
   }
 
-  res.render("slips", { students: [student], datesheet, logoBase64 });
+  res.render("slips", { students: [student], datesheet, logoBase64, stampBase64 });
 });
 
 
