@@ -22,7 +22,7 @@ app.use("/static", express.static(path.join(__dirname, "public")));
 
 // Students data from Excel
 // Excel columns: RollNo, Name, Class, FatherName, PhotoPath
-const rawStudents = readExcel(path.join(__dirname, "data10th.xlsx"));
+const rawStudents = readExcel(path.join(__dirname, "data5th.xlsx"));
 const students = rawStudents.map((st) => {
   const imgAbs = path.join(__dirname, "public", "images", String(st.PhotoPath || "").trim());
   //console.log("Image path:", imgAbs); // Debugging
@@ -34,11 +34,11 @@ const students = rawStudents.map((st) => {
 
 // Place datesheet here(same for all)
 const datesheet = [
-  { date: "15-09-2025", subject: "Science" },
+  { date: "15-09-2025", subject: "S.st" },
   { date: "17-09-2025", subject: "Hindi" },
   { date: "19-09-2025", subject: "Maths" },
-  { date: "20-09-2025", subject: "Music" },
-  { date: "24-09-2025", subject: "S.st" },
+  { date: "20-09-2025", subject: "Computer" },
+  { date: "24-09-2025", subject: "Science" },
   { date: "25-09-2025", subject: "English" }
 ];
 
@@ -89,7 +89,7 @@ app.get("/generate-pdf", async (req, res) => {
     await browser.close();
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", "inline; filename=rollnoslips.pdf");
+    res.setHeader("Content-Disposition", "inline; filename=AdmitCard.pdf");
     res.send(pdfBuffer);
   } catch (err) {
     console.error(err);
